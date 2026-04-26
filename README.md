@@ -21,4 +21,4 @@ The design medium is **HTML/CSS/JS** — these are prototypes, not production co
 - `eisaku-lp/README.md` — this file
 - `eisaku-lp/project/` — the `EiSaku LP` project files (HTML prototypes, assets, components)
 <img width="1889" height="980" alt="image" src="https://github.com/user-attachments/assets/4e05ed91-1823-44d9-82c5-0688f09ca81a" />
-![EiSaku アプリ画面](images/app-screenshot.png)
+
