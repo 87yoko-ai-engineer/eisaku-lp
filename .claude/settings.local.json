@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:api.anthropic.com)",
+      "Bash(cp \"C:\\\\Users\\\\masah\\\\.claude\\\\projects\\\\C--Users-masah-OneDrive--------imanyu-lectures-EiSaku-LP-eisaku-lp\\\\913133d8-aa5b-43d0-acb8-42e95a29294b\\\\tool-results\\\\webfetch-1777099427849-px7lv5.bin\" /tmp/design.gz)",
+      "Read(//c/tmp/**)",
+      "Bash(gunzip -f design.gz)",
+      "Read(//tmp/**)",
+      "Bash(xxd)",
+      "Bash(tar xf *)",
+      "PowerShell(Get-Content \"/tmp/eisaku-lp/project/EiSaku LP.html\" -Raw | Out-File -FilePath \"/tmp/eisaku_lp_content.txt\" -Encoding utf8; Write-Host \"Done, size: $\\(\\(Get-Item '/tmp/eisaku_lp_content.txt'\\).Length\\)\")",
+      "Read(//c/Users/masah/OneDrive/デスクトップ/imanyu_lectures/EiSaku/**)"
+    ]
+  }
+}

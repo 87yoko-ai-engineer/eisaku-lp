@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EiSaku LP — デザイン要件定義書</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Inter', 'Noto Sans JP', sans-serif;
+    background: #FAFAFA;
+    color: #1F2937;
+    font-size: 15px;
+    line-height: 1.7;
+    padding: 48px 24px 80px;
+  }
+  .doc {
+    max-width: 860px;
+    margin: 0 auto;
+  }
+  .doc-header {
+    border-bottom: 2px solid #F9A8D4;
+    padding-bottom: 28px;
+    margin-bottom: 40px;
+  }
+  .doc-label {
+    display: inline-block;
+    background: #FCE7F3;
+    color: #EC4899;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 4px;
+    margin-bottom: 12px;
+  }
+  h1 {
+    font-family: 'Inter', sans-serif;
+    font-size: 32px;
+    font-weight: 700;
+    color: #111827;
+    margin-bottom: 8px;
+  }
+  .doc-meta {
+    color: #6B7280;
+    font-size: 13px;
+  }
+  section {
+    margin-bottom: 48px;
+  }
+  h2 {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #9CA3AF;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #E5E7EB;
+  }
+  h3 {
+    font-size: 16px;
+    font-weight: 600;
+    color: #1F2937;
+    margin: 20px 0 8px;
+  }
+  p {
+    color: #374151;
+    margin-bottom: 12px;
+  }
+  .card {
+    background: #fff;
+    border: 1px solid #E5E7EB;
+    border-radius: 10px;
+    padding: 24px;
+    margin-bottom: 12px;
+  }
+  .card-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: #111827;
+    margin-bottom: 6px;
+  }
+  .card-body {
+    font-size: 14px;
+    color: #6B7280;
+    line-height: 1.65;
+  }
+  /* Color palette */
+  .palette {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 12px;
+  }
+  .swatch {
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid #E5E7EB;
+  }
+  .swatch-color {
+    height: 56px;
+  }
+  .swatch-info {
+    background: #fff;
+    padding: 8px 10px;
+    font-size: 12px;
+  }
+  .swatch-name { font-weight: 600; color: #1F2937; }
+  .swatch-hex { color: #9CA3AF; font-family: 'Inter', monospace; }
+
+  /* Typography */
+  .type-example {
+    background: #fff;
+    border: 1px solid #E5E7EB;
+    border-radius: 8px;
+    padding: 20px 24px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: baseline;
+    gap: 20px;
+  }
+  .type-sample { flex: 1; }
+  .type-spec { font-size: 12px; color: #9CA3AF; white-space: nowrap; }
+
+  /* Section structure */
+  .section-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .section-item {
+    display: grid;
+    grid-template-columns: 32px 1fr;
+    gap: 16px;
+    align-items: start;
+    background: #fff;
+    border: 1px solid #E5E7EB;
+    border-radius: 8px;
+    padding: 16px 20px;
+  }
+  .section-num {
+    width: 28px;
+    height: 28px;
+    background: #FCE7F3;
+    color: #EC4899;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .section-detail .title { font-weight: 600; font-size: 15px; margin-bottom: 4px; }
+  .section-detail .desc { font-size: 13px; color: #6B7280; }
+  .section-detail .notes { font-size: 13px; color: #374151; margin-top: 8px; background: #FAFAFA; border-radius: 6px; padding: 8px 12px; border-left: 3px solid #F9A8D4; }
+
+  /* Design principles */
+  .principle-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  .principle-card {
+    background: #fff;
+    border: 1px solid #E5E7EB;
+    border-radius: 10px;
+    padding: 20px;
+  }
+  .principle-icon {
+    font-size: 22px;
+    margin-bottom: 8px;
+  }
+  .principle-label {
+    font-weight: 600;
+    font-size: 14px;
+    margin-bottom: 6px;
+    color: #111827;
+  }
+  .principle-desc {
+    font-size: 13px;
+    color: #6B7280;
+    line-height: 1.6;
+  }
+
+  /* Layout sketch */
+  .layout-sketch {
+    background: #fff;
+    border: 1px solid #E5E7EB;
+    border-radius: 10px;
+    padding: 24px;
+    font-size: 13px;
+    color: #374151;
+  }
+  .sketch-section {
+    border: 1.5px dashed #E5E7EB;
+    border-radius: 6px;
+    padding: 10px 14px;
+    margin-bottom: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .sketch-section .label { font-weight: 500; color: #374151; }
+  .sketch-section .detail { font-size: 12px; color: #9CA3AF; }
+  .sketch-section.hero { border-color: #F9A8D4; background: #FFF5FA; }
+  .sketch-section.problem { border-color: #E5E7EB; background: #FAFAFA; }
+  .sketch-section.feature { border-color: #D1FAE5; background: #F0FDF4; }
+  .sketch-section.howto { border-color: #DBEAFE; background: #EFF6FF; }
+  .sketch-section.cta { border-color: #F9A8D4; background: #FFF5FA; }
+
+  /* Tag */
+  .tag {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 500;
+    margin-right: 6px;
+  }
+  .tag-pink { background: #FCE7F3; color: #EC4899; }
+  .tag-green { background: #D1FAE5; color: #059669; }
+  .tag-blue { background: #DBEAFE; color: #2563EB; }
+
+  /* Approval section */
+  .approval-box {
+    background: #fff;
+    border: 2px solid #F9A8D4;
+    border-radius: 12px;
+    padding: 28px 32px;
+    text-align: center;
+  }
+  .approval-title {
+    font-size: 17px;
+    font-weight: 700;
+    color: #111827;
+    margin-bottom: 8px;
+  }
+  .approval-sub {
+    font-size: 14px;
+    color: #6B7280;
+  }
+</style>
+</head>
+<body>
+<div class="doc">
+
+  <!-- Header -->
+  <div class="doc-header">
+    <div class="doc-label">Design Brief</div>
+    <h1>EiSaku LP — デザイン要件定義書</h1>
+    <div class="doc-meta">バージョン 1.0 ・ 2026年4月25日 ・ ランディングページ（PC版）</div>
+  </div>
+
+  <!-- 1. 目的と対象 -->
+  <section>
+    <h2>01 ・ 目的とターゲット</h2>
+    <div class="card">
+      <div class="card-title">作成物</div>
+      <div class="card-body">EiSaku（英作文添削アプリ）の宣伝用ランディングページ。HTMLファイル1枚・CSSインライン。PC幅1280px想定。</div>
+    </div>
+    <div class="card">
+      <div class="card-title">ターゲットユーザー</div>
+      <div class="card-body">TOEIC 600〜800点の日本人社会人。ビジネスメールやレポートで通用する英作文力を身につけたいが、続けられる仕組みがなく伸び悩んでいる層。</div>
+    </div>
+    <div class="card">
+      <div class="card-title">ページのゴール</div>
+      <div class="card-body">「なんかいいかも、使ってみよう」と思わせること。機能の説明より<strong>体験のイメージ</strong>を伝えることを優先する。</div>
+    </div>
+  </section>
+
+  <!-- 2. デザイン方針 -->
+  <section>
+    <h2>02 ・ デザイン方針</h2>
+    <div class="principle-grid">
+      <div class="principle-card">
+        <div class="principle-icon">🔬</div>
+        <div class="principle-label">洗練されたツール感</div>
+        <div class="principle-desc">「勉強アプリ」ではなく「頭のいいプロダクト」。Notionに近い白基調のミニマルさを基本とし、ピンクは差し色として効かせる。</div>
+      </div>
+      <div class="principle-card">
+        <div class="principle-icon">📸</div>
+        <div class="principle-label">実画面を主役に</div>
+        <div class="principle-desc">添削画面・スコア・ハイライトなどの実UI（ダミー）を大きく見せることで、使用感をリアルに伝える。説明文は最小限に。</div>
+      </div>
+      <div class="principle-card">
+        <div class="principle-icon">✂️</div>
+        <div class="principle-label">余白と情報密度のバランス</div>
+        <div class="principle-desc">詰め込まない。1セクション1メッセージ。セクション間は十分な余白（80〜120px）を確保し、読み疲れさせない。</div>
+      </div>
+      <div class="principle-card">
+        <div class="principle-icon">🎮</div>
+        <div class="principle-label">ゲーミフィケーションはさりげなく</div>
+        <div class="principle-desc">Lv.4バッジ・スコア「82」などは視覚的に見せるが、ゲームっぽさは前に出さない。知性と遊び心のバランスを保つ。</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. カラーパレット -->
+  <section>
+    <h2>03 ・ カラーパレット</h2>
+    <div class="palette">
+      <div class="swatch">
+        <div class="swatch-color" style="background:#FFFFFF; border-bottom:1px solid #E5E7EB;"></div>
+        <div class="swatch-info"><div class="swatch-name">Base White</div><div class="swatch-hex">#FFFFFF</div></div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background:#FAFAFA;"></div>
+        <div class="swatch-info"><div class="swatch-name">Off White</div><div class="swatch-hex">#FAFAFA</div></div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background:#1F2937;"></div>
+        <div class="swatch-info"><div class="swatch-name">Text Dark</div><div class="swatch-hex">#1F2937</div></div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background:#6B7280;"></div>
+        <div class="swatch-info"><div class="swatch-name">Text Sub</div><div class="swatch-hex">#6B7280</div></div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background:#E5E7EB;"></div>
+        <div class="swatch-info"><div class="swatch-name">Border</div><div class="swatch-hex">#E5E7EB</div></div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background:#F9A8D4;"></div>
+        <div class="swatch-info"><div class="swatch-name">Accent Pink</div><div class="swatch-hex">#F9A8D4</div></div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background:#EC4899;"></div>
+        <div class="swatch-info"><div class="swatch-name">Accent Dark</div><div class="swatch-hex">#EC4899</div></div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background:#FCE7F3;"></div>
+        <div class="swatch-info"><div class="swatch-name">Accent Light</div><div class="swatch-hex">#FCE7F3</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. タイポグラフィ -->
+  <section>
+    <h2>04 ・ タイポグラフィ</h2>
+    <div class="type-example">
+      <div class="type-sample" style="font-family:'Inter','Noto Sans JP',sans-serif; font-size:40px; font-weight:700; line-height:1.2;">書いて、直して、<span style="color:#EC4899;">伸びていく。</span></div>
+      <div class="type-spec">Noto Sans JP Bold / 40px<br>ヒーローキャッチコピー</div>
+    </div>
+    <div class="type-example">
+      <div class="type-sample" style="font-family:'Inter',sans-serif; font-size:13px; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; color:#EC4899;">AI-POWERED ENGLISH WRITING COACH</div>
+      <div class="type-spec">Inter SemiBold / 13px<br>セクションラベル</div>
+    </div>
+    <div class="type-example">
+      <div class="type-sample" style="font-family:'Noto Sans JP',sans-serif; font-size:24px; font-weight:700;">多角的な添削で、着実に伸びる。</div>
+      <div class="type-spec">Noto Sans JP Bold / 24px<br>セクション見出し (H2)</div>
+    </div>
+    <div class="type-example">
+      <div class="type-sample" style="font-family:'Noto Sans JP',sans-serif; font-size:15px; color:#374151; line-height:1.75;">文法・語彙・文体・論理構成まで、AIが多角的にフィードバック。<br>毎日少しずつ書いて、確実に英語力を積み上げましょう。</div>
+      <div class="type-spec">Noto Sans JP / 15px<br>本文テキスト</div>
+    </div>
+  </section>
+
+  <!-- 5. ページ構成 -->
+  <section>
+    <h2>05 ・ ページ構成（5セクション）</h2>
+    <div class="layout-sketch">
+      <div style="margin-bottom:12px; font-size:13px; color:#9CA3AF;">▲ ページ上部 ────────────────────────────────────────</div>
+      <div class="sketch-section hero">
+        <div>
+          <div class="label">① Hero</div>
+          <div class="detail">キャッチコピー ＋ サブコピー ＋ CTAボタン ＋ アプリ画面モックアップ</div>
+        </div>
+        <div style="font-size:12px; color:#EC4899;">高さ 約 640px</div>
+      </div>
+      <div class="sketch-section problem">
+        <div>
+          <div class="label">② 課題提起「こんな悩みありませんか？」</div>
+          <div class="detail">3〜4つの悩みカード（ターゲットの共感ポイント）</div>
+        </div>
+        <div style="font-size:12px; color:#6B7280;">高さ 約 360px</div>
+      </div>
+      <div class="sketch-section feature">
+        <div>
+          <div class="label">③ 3つの特徴</div>
+          <div class="detail">多角的添削 / レベル別ステップアップ / 振り返り ＋ 各機能のUI断片</div>
+        </div>
+        <div style="font-size:12px; color:#059669;">高さ 約 560px</div>
+      </div>
+      <div class="sketch-section howto">
+        <div>
+          <div class="label">④ 使い方の流れ（3ステップ）</div>
+          <div class="detail">書く → 添削を受ける → 振り返る（ビフォー・アフター例付き）</div>
+        </div>
+        <div style="font-size:12px; color:#2563EB;">高さ 約 480px</div>
+      </div>
+      <div class="sketch-section cta">
+        <div>
+          <div class="label">⑤ 最後のCTA</div>
+          <div class="detail">キャッチコピー再掲 ＋ 「今すぐ試す」ボタン ＋ フッター</div>
+        </div>
+        <div style="font-size:12px; color:#EC4899;">高さ 約 280px</div>
+      </div>
+      <div style="margin-top:12px; font-size:13px; color:#9CA3AF;">▼ ページ下部 ────────────────────────────────────────</div>
+    </div>
+  </section>
+
+  <!-- 6. セクション詳細 -->
+  <section>
+    <h2>06 ・ セクション詳細</h2>
+    <div class="section-list">
+
+      <div class="section-item">
+        <div class="section-num">1</div>
+        <div class="section-detail">
+          <div class="title">Hero ─ 第一印象で引き込む</div>
+          <div class="desc">中央揃え。ロゴ＋ナビバー → キャッチコピー（大）→ サブコピー（小）→ CTAボタン（ピンク）→ アプリ画面モックアップ（ブラウザ風フレーム）。</div>
+          <div class="notes">
+            キャッチコピー：「書いて、直して、伸びていく。あなた専用の英作文コーチ。」<br>
+            「伸びていく」部分はピンク（#EC4899）でアクセント。<br>
+            アプリ画面はFree Mode添削画面のモック（スコア82、ビフォー・アフター表示）を配置。<br>
+            背景は薄いグラデーション（#FFFFFF → #FCE7F3, 上から下へ）。
+          </div>
+        </div>
+      </div>
+
+      <div class="section-item">
+        <div class="section-num">2</div>
+        <div class="section-detail">
+          <div class="title">課題提起 ─ 「こんな悩みありませんか？」</div>
+          <div class="desc">背景 #FAFAFA。グリッド2×2または横並び3〜4枚の悩みカード。</div>
+          <div class="notes">
+            悩み例：①「英文を書いても、これで合ってるか自信がない」②「文法は知ってるつもりなのに、いざ書くと出てこない」③「どこが間違いで、なぜ間違いかが分からない」④「続けられる仕組みがなく、いつも三日坊主」<br>
+            カード：白背景、薄ボーダー、シンプルなアイコン（Lucide系）。
+          </div>
+        </div>
+      </div>
+
+      <div class="section-item">
+        <div class="section-num">3</div>
+        <div class="section-detail">
+          <div class="title">3つの特徴 ─ 「EiSakuでできること」</div>
+          <div class="desc">縦に3段。各段：左（テキスト説明）+ 右（UI断片のモック）で交互レイアウト。</div>
+          <div class="notes">
+            ① 多角的な添削：Grammar / Vocabulary / Tone / Structureのタグ＋ハイライト例。ビフォー・アフターを並列表示したUI断片。<br>
+            ② レベル別ステップアップ：Lv.1〜10のリスト、現在地ハイライト（実画面に近いデザイン）。<br>
+            ③ 振り返りの仕組み：添削履歴一覧のUI断片（スコア・タグ表示）。
+          </div>
+        </div>
+      </div>
+
+      <div class="section-item">
+        <div class="section-num">4</div>
+        <div class="section-detail">
+          <div class="title">使い方の流れ ─ 3ステップ</div>
+          <div class="desc">横ライン＋ステップ番号（01/02/03）＋ビフォー・アフター例のカード。</div>
+          <div class="notes">
+            Step 01「英文を書く」：テキスト入力エリアのモック。<br>
+            Step 02「AIが添削」：ハイライトされた添削結果（ビフォー：原文、アフター：修正文）。<br>
+            Step 03「振り返って伸びる」：スコア表示＋履歴の積み重ねイメージ。<br>
+            ビフォー・アフター例のダミー文：「I want visit Paris...」→「I want to visit Paris, where there are many beautiful buildings.」
+          </div>
+        </div>
+      </div>
+
+      <div class="section-item">
+        <div class="section-num">5</div>
+        <div class="section-detail">
+          <div class="title">最後のCTA ─ 決断を促す</div>
+          <div class="desc">背景をピンク系グラデーション（薄め）に変えて視覚的メリハリをつける。キャッチコピーを再掲し、大きなCTAボタン。フッターはシンプル。</div>
+          <div class="notes">
+            コピー：「今日から、書いて伸びる習慣を。」<br>
+            CTAボタン：「EiSakuを試してみる →」（ピンク、大きめ）<br>
+            補足テキスト：「無料でスタート ・ アカウント登録不要」
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 7. コンポーネント仕様 -->
+  <section>
+    <h2>07 ・ コンポーネント仕様</h2>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+      <div class="card">
+        <div class="card-title">ナビバー</div>
+        <div class="card-body">白背景、薄ボーダー下線。左：ロゴ「EiSaku」（ピンクアクセント）。右：テキストリンク＋CTAボタン（小）。sticky固定。</div>
+      </div>
+      <div class="card">
+        <div class="card-title">CTAボタン（Primary）</div>
+        <div class="card-body">背景 #EC4899、テキスト白、border-radius 8px、padding 14px 32px。ホバー：少し濃く (#DB2777)。</div>
+      </div>
+      <div class="card">
+        <div class="card-title">添削UIモック（ビフォー・アフター）</div>
+        <div class="card-body">左：原文（取り消し線＋黄系ハイライト）。右：修正文（ピンク系アンダーライン）。スコア：太字数字＋ピンクプログレスバー。</div>
+      </div>
+      <div class="card">
+        <div class="card-title">タグ（観点ラベル）</div>
+        <div class="card-body">Grammar：赤系 / Vocabulary：青系 / Tone：緑系 / Structure：紫系。角丸4px、小フォント。</div>
+      </div>
+      <div class="card">
+        <div class="card-title">課題提起カード</div>
+        <div class="card-body">白背景、1px #E5E7EB ボーダー、border-radius 10px。アイコン＋悩みテキスト。shadow-sm。</div>
+      </div>
+      <div class="card">
+        <div class="card-title">特徴セクションの区切り</div>
+        <div class="card-body">奇数：白背景、偶数：#FAFAFA背景。交互に切り替えることでリズムを作る。</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8. インタラクション -->
+  <section>
+    <h2>08 ・ インタラクション（LP内のみ）</h2>
+    <div class="card">
+      <div class="card-title">スクロール時のフェードイン</div>
+      <div class="card-body">各セクションは初期状態 opacity:0 / translateY(20px)。スクロールして画面内に入ったら CSS transition でフェードイン（0.5s ease-out）。IntersectionObserver で実装。</div>
+    </div>
+    <div class="card">
+      <div class="card-title">ビフォー・アフターのアニメーション</div>
+      <div class="card-body">ステップ2（使い方の流れ）では、画面内進入時に原文→修正文のハイライトがじわっと出現するアニメーションを追加。</div>
+    </div>
+    <div class="card">
+      <div class="card-title">スコアのカウントアップ</div>
+      <div class="card-body">ヒーロー内のスコア「82」は、画面表示時に0→82へカウントアップするアニメーション（0.8s）。</div>
+    </div>
+  </section>
+
+  <!-- 承認 -->
+  <section>
+    <div class="approval-box">
+      <div class="approval-title">このデザイン要件定義書を確認してください</div>
+      <div class="approval-sub">内容にご承認をいただければ、実際のLPページ制作に進みます。<br>修正・追加事項があればお知らせください。</div>
+    </div>
+  </section>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,1320 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EiSaku — 書いて、直して、伸びていく。</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --white: #FFFFFF;
+  --off-white: #FAFAFA;
+  --text: #1F2937;
+  --text-sub: #6B7280;
+  --border: #E5E7EB;
+  --pink: #F9A8D4;
+  --pink-dark: #EC4899;
+  --pink-darker: #DB2777;
+  --pink-light: #FCE7F3;
+  --pink-bg: #FDF2F8;
+  --green: #10B981;
+  --amber: #F59E0B;
+  --blue: #3B82F6;
+  --purple: #8B5CF6;
+  --red: #EF4444;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Inter', 'Noto Sans JP', sans-serif;
+  color: var(--text);
+  background: var(--white);
+  font-size: 16px;
+  line-height: 1.7;
+  overflow-x: hidden;
+}
+
+/* ── Utility ── */
+.fade-in {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+.fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.fade-in-delay-1 { transition-delay: 0.1s; }
+.fade-in-delay-2 { transition-delay: 0.2s; }
+.fade-in-delay-3 { transition-delay: 0.3s; }
+.fade-in-delay-4 { transition-delay: 0.4s; }
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  font-family: 'Inter', sans-serif;
+}
+.tag-grammar  { background: #FEE2E2; color: #DC2626; }
+.tag-vocab    { background: #DBEAFE; color: #2563EB; }
+.tag-tone     { background: #D1FAE5; color: #059669; }
+.tag-struct   { background: #EDE9FE; color: #7C3AED; }
+.tag-pink     { background: var(--pink-light); color: var(--pink-dark); }
+.tag-lv       { background: var(--pink-light); color: var(--pink-dark); font-size: 11px; padding: 2px 8px; }
+
+/* ── Nav ── */
+nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(255,255,255,0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  padding: 0 40px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.nav-logo {
+  font-family: 'Inter', sans-serif;
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--text);
+  letter-spacing: -0.03em;
+  text-decoration: none;
+}
+.nav-logo span { color: var(--pink-dark); }
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  font-size: 14px;
+  color: var(--text-sub);
+}
+.nav-links a { text-decoration: none; color: inherit; transition: color 0.2s; }
+.nav-links a:hover { color: var(--text); }
+
+.btn-primary {
+  background: var(--pink-dark);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 24px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.15s;
+  text-decoration: none;
+  display: inline-block;
+  font-family: 'Noto Sans JP', 'Inter', sans-serif;
+}
+.btn-primary:hover { background: var(--pink-darker); transform: translateY(-1px); }
+.btn-primary.large {
+  padding: 16px 40px;
+  font-size: 16px;
+  border-radius: 10px;
+}
+
+/* ── Hero ── */
+#hero {
+  background: linear-gradient(180deg, #fff 0%, #fdf2f8 60%, #fce7f3 100%);
+  padding: 100px 40px 0;
+  text-align: center;
+  min-height: 720px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.hero-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--pink-light);
+  color: var(--pink-dark);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  padding: 6px 16px;
+  border-radius: 100px;
+  margin-bottom: 28px;
+  font-family: 'Inter', sans-serif;
+}
+.hero-eyebrow::before {
+  content: '✦';
+  font-size: 10px;
+}
+.hero-h1 {
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 52px;
+  font-weight: 900;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: var(--text);
+  margin-bottom: 20px;
+}
+.hero-h1 .accent { color: var(--pink-dark); }
+.hero-sub {
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 17px;
+  color: var(--text-sub);
+  max-width: 480px;
+  margin: 0 auto 36px;
+  line-height: 1.7;
+}
+.hero-cta-group {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 64px;
+}
+.btn-secondary {
+  color: var(--text-sub);
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  transition: color 0.2s;
+}
+.btn-secondary:hover { color: var(--text); }
+
+/* App mock container */
+.hero-app-mock {
+  width: 100%;
+  max-width: 1000px;
+  background: #fff;
+  border-radius: 14px 14px 0 0;
+  border: 1px solid var(--border);
+  border-bottom: none;
+  box-shadow: 0 -4px 40px rgba(249,168,212,0.2), 0 -1px 0 var(--border);
+  overflow: hidden;
+}
+.mock-titlebar {
+  background: #FAFAFA;
+  border-bottom: 1px solid var(--border);
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.mock-dot { width: 10px; height: 10px; border-radius: 50%; }
+.mock-title-text {
+  font-size: 12px;
+  color: var(--text-sub);
+  margin-left: 8px;
+  font-family: 'Inter', sans-serif;
+}
+.mock-app {
+  display: flex;
+  height: 380px;
+}
+.mock-sidebar {
+  width: 220px;
+  border-right: 1px solid var(--border);
+  padding: 20px 16px;
+  flex-shrink: 0;
+  font-family: 'Inter', sans-serif;
+}
+.mock-sidebar-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--text-sub);
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+.mock-textarea {
+  width: 100%;
+  background: #FAFAFA;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px;
+  font-size: 12px;
+  color: var(--text);
+  line-height: 1.6;
+  resize: none;
+  font-family: 'Inter', sans-serif;
+  height: 120px;
+}
+.mock-style-tabs {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+.mock-tab {
+  padding: 4px 10px;
+  border-radius: 5px;
+  font-size: 11px;
+  font-weight: 500;
+  border: 1px solid var(--border);
+  cursor: pointer;
+  font-family: 'Noto Sans JP', sans-serif;
+}
+.mock-tab.active { background: var(--pink-light); border-color: var(--pink); color: var(--pink-dark); }
+.mock-submit-btn {
+  width: 100%;
+  background: var(--pink-dark);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 12px;
+  font-family: 'Noto Sans JP', sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+.mock-content {
+  flex: 1;
+  padding: 20px;
+  overflow: hidden;
+}
+.mock-score-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.mock-score {
+  font-size: 36px;
+  font-weight: 800;
+  color: var(--pink-dark);
+  font-family: 'Inter', sans-serif;
+  line-height: 1;
+}
+.mock-score-label { font-size: 10px; color: var(--text-sub); font-family: 'Inter', sans-serif; }
+.mock-score-bar {
+  flex: 1;
+  height: 5px;
+  background: var(--border);
+  border-radius: 99px;
+  overflow: hidden;
+}
+.mock-score-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--pink), var(--pink-dark));
+  border-radius: 99px;
+  width: 0;
+  transition: width 1.2s cubic-bezier(0.4,0,0.2,1);
+}
+.mock-diff-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+.mock-diff-pane {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px;
+  font-size: 12px;
+  line-height: 1.6;
+  font-family: 'Inter', sans-serif;
+}
+.mock-diff-pane .pane-label {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--text-sub);
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.mock-diff-pane .pane-label::before { content: '●'; font-size: 8px; }
+.mock-diff-pane.before .pane-label { color: #6B7280; }
+.mock-diff-pane.after { border-color: var(--pink); background: #fffafd; }
+.mock-diff-pane.after .pane-label { color: var(--pink-dark); }
+.hl-struct { background: #EDE9FE; color: #6D28D9; border-radius: 2px; padding: 0 2px; text-decoration: line-through; }
+.hl-struct-fix { background: #EDE9FE; color: #6D28D9; border-radius: 2px; padding: 0 2px; }
+.hl-vocab { background: #DBEAFE; color: #1D4ED8; border-radius: 2px; padding: 0 2px; text-decoration: line-through; }
+.hl-vocab-fix { background: #DBEAFE; color: #1D4ED8; border-radius: 2px; padding: 0 2px; }
+.mock-detail-item {
+  background: var(--off-white);
+  border-radius: 8px;
+  padding: 10px 12px;
+  margin-bottom: 8px;
+  font-size: 11px;
+  line-height: 1.6;
+  font-family: 'Inter', sans-serif;
+}
+.mock-detail-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+.arrow-icon { color: var(--text-sub); font-size: 13px; }
+.mock-explanation { color: var(--text-sub); font-size: 11px; font-family: 'Noto Sans JP', sans-serif; }
+
+/* ── Section Commons ── */
+.section-eyebrow {
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--pink-dark);
+  margin-bottom: 12px;
+}
+.section-h2 {
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 34px;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+  color: var(--text);
+  margin-bottom: 16px;
+}
+.section-lead {
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 16px;
+  color: var(--text-sub);
+  line-height: 1.75;
+  max-width: 560px;
+}
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 48px;
+}
+
+/* ── Problem Section ── */
+#problem {
+  padding: 100px 0;
+  background: var(--off-white);
+}
+#problem .inner { text-align: center; }
+.problem-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-top: 48px;
+}
+.problem-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 28px 20px;
+  text-align: left;
+}
+.problem-icon {
+  width: 44px;
+  height: 44px;
+  background: var(--pink-light);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 14px;
+}
+.problem-icon svg { width: 22px; height: 22px; stroke: var(--pink-dark); }
+.problem-title {
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 6px;
+  line-height: 1.5;
+}
+.problem-body {
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 13px;
+  color: var(--text-sub);
+  line-height: 1.65;
+}
+
+/* ── Features Section ── */
+.feature-block {
+  padding: 100px 0;
+  display: flex;
+  align-items: center;
+  gap: 80px;
+}
+.feature-block.reverse { flex-direction: row-reverse; }
+.feature-block.bg-off { background: var(--off-white); }
+.feature-text { flex: 1; }
+.feature-num {
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--pink-dark);
+  letter-spacing: 0.05em;
+  margin-bottom: 8px;
+}
+.feature-h3 {
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 1.35;
+  color: var(--text);
+  margin-bottom: 14px;
+}
+.feature-desc {
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 15px;
+  color: var(--text-sub);
+  line-height: 1.8;
+  margin-bottom: 20px;
+}
+.feature-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.feature-visual { flex: 1; }
+
+/* Feature 1 mock — before/after */
+.bf-mock {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+}
+.bf-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+.bf-score-big {
+  font-family: 'Inter', sans-serif;
+  font-size: 42px;
+  font-weight: 800;
+  color: var(--pink-dark);
+  line-height: 1;
+}
+.bf-tags { display: flex; gap: 6px; }
+.bf-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+.bf-pane {
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  padding: 14px;
+  font-size: 13px;
+  line-height: 1.65;
+  font-family: 'Inter', sans-serif;
+}
+.bf-pane-label {
+  font-size: 11px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.bf-pane-label .dot { width: 7px; height: 7px; border-radius: 50%; }
+.bf-pane.before .dot { background: #9CA3AF; }
+.bf-pane.after { border-color: var(--pink); background: var(--pink-bg); }
+.bf-pane.after .dot { background: var(--pink-dark); }
+.bf-note {
+  background: var(--off-white);
+  border-radius: 8px;
+  padding: 12px 14px;
+  font-size: 12px;
+  font-family: 'Noto Sans JP', sans-serif;
+  color: var(--text-sub);
+  border-left: 3px solid var(--pink);
+  line-height: 1.6;
+}
+
+/* Feature 2 mock — level */
+.level-mock {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+}
+.level-mock-title {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-sub);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0 4px;
+  margin-bottom: 10px;
+  font-family: 'Inter', sans-serif;
+}
+.level-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  margin-bottom: 4px;
+  font-size: 13px;
+  font-family: 'Noto Sans JP', sans-serif;
+}
+.level-item.done { opacity: 0.45; }
+.level-item.current {
+  background: var(--pink-light);
+  border: 1.5px solid var(--pink);
+}
+.level-item.upcoming { color: var(--text-sub); }
+.lv-badge {
+  width: 28px;
+  height: 28px;
+  border-radius: 7px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 700;
+  flex-shrink: 0;
+  font-family: 'Inter', sans-serif;
+}
+.lv-badge.done { background: var(--off-white); color: var(--text-sub); border: 1px solid var(--border); }
+.lv-badge.current { background: var(--pink-dark); color: #fff; }
+.lv-badge.upcoming { background: var(--off-white); color: var(--text-sub); border: 1px solid var(--border); }
+.level-name { flex: 1; font-size: 13px; font-weight: 500; }
+.level-check { color: var(--green); font-size: 14px; }
+.current-badge-big {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--pink-light);
+  color: var(--pink-dark);
+  border-radius: 100px;
+  padding: 8px 18px;
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 16px;
+  font-family: 'Inter', sans-serif;
+}
+
+/* Feature 3 mock — history */
+.history-mock {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+}
+.history-header {
+  background: var(--off-white);
+  border-bottom: 1px solid var(--border);
+  padding: 14px 20px;
+  font-size: 13px;
+  font-weight: 700;
+  font-family: 'Noto Sans JP', sans-serif;
+}
+.history-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--border);
+}
+.history-score {
+  text-align: center;
+  flex-shrink: 0;
+}
+.history-score .num {
+  font-family: 'Inter', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--pink-dark);
+  line-height: 1;
+  display: block;
+}
+.history-score .lbl {
+  font-size: 9px;
+  color: var(--text-sub);
+  font-family: 'Inter', sans-serif;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+.history-body { flex: 1; }
+.history-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+.history-date { font-size: 11px; color: var(--text-sub); font-family: 'Inter', sans-serif; }
+.history-text { font-size: 13px; color: var(--text); line-height: 1.4; font-family: 'Inter', sans-serif; }
+.history-tags { display: flex; gap: 5px; margin-top: 5px; }
+
+/* ── How-to Section ── */
+#howto {
+  padding: 100px 0;
+  background: var(--off-white);
+}
+.howto-inner { text-align: center; }
+.steps-container {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr auto 1fr;
+  gap: 0;
+  align-items: start;
+  margin-top: 56px;
+}
+.step-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 32px;
+  color: var(--pink);
+  font-size: 22px;
+}
+.step-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 28px 24px;
+  text-align: left;
+}
+.step-num {
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--pink-dark);
+  margin-bottom: 8px;
+}
+.step-title {
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 17px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+.step-desc {
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 13px;
+  color: var(--text-sub);
+  line-height: 1.65;
+  margin-bottom: 18px;
+}
+
+/* Step 1 mock — input */
+.step-input-mock {
+  background: var(--off-white);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px;
+  font-size: 12px;
+  font-family: 'Inter', sans-serif;
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 80px;
+}
+.step-input-mock .cursor {
+  display: inline-block;
+  width: 1px;
+  height: 14px;
+  background: var(--pink-dark);
+  margin-left: 1px;
+  vertical-align: text-bottom;
+  animation: blink 1s step-end infinite;
+}
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+/* Step 2 mock — before/after */
+.step-bf {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 12px;
+  font-family: 'Inter', sans-serif;
+}
+.step-bf-row {
+  border-radius: 7px;
+  padding: 10px 12px;
+  line-height: 1.55;
+}
+.step-bf-row.before { background: #FEF3C7; border: 1px solid #FDE68A; color: #92400E; }
+.step-bf-row.after  { background: var(--pink-bg); border: 1px solid var(--pink); color: #831843; }
+.step-bf-label { font-weight: 700; font-size: 10px; letter-spacing: 0.06em; margin-bottom: 4px; }
+
+/* Step 3 mock — score growth */
+.step-growth {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+.growth-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12px;
+  font-family: 'Inter', sans-serif;
+}
+.growth-date { color: var(--text-sub); width: 42px; flex-shrink: 0; }
+.growth-bar-wrap { flex: 1; height: 8px; background: var(--border); border-radius: 99px; overflow: hidden; }
+.growth-bar { height: 100%; border-radius: 99px; background: linear-gradient(90deg, var(--pink), var(--pink-dark)); }
+.growth-score { font-weight: 700; color: var(--pink-dark); width: 28px; text-align: right; }
+
+/* ── CTA Section ── */
+#cta {
+  padding: 120px 40px;
+  background: linear-gradient(160deg, #FDF2F8 0%, #FCE7F3 50%, #FDF2F8 100%);
+  text-align: center;
+}
+.cta-h2 {
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 40px;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+  color: var(--text);
+  margin-bottom: 16px;
+}
+.cta-sub {
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 17px;
+  color: var(--text-sub);
+  margin-bottom: 40px;
+}
+
+/* ── Footer ── */
+footer {
+  background: var(--white);
+  border-top: 1px solid var(--border);
+  padding: 32px 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.footer-logo {
+  font-family: 'Inter', sans-serif;
+  font-weight: 800;
+  font-size: 18px;
+  color: var(--text);
+}
+.footer-logo span { color: var(--pink-dark); }
+.footer-copy {
+  font-size: 13px;
+  color: var(--text-sub);
+  font-family: 'Inter', sans-serif;
+}
+
+/* ── Responsive ── */
+
+/* Tablet (≤1024px) */
+@media (max-width: 1024px) {
+  .container { padding: 0 32px; }
+
+  .hero-h1 { font-size: 42px; }
+
+  .problem-grid { grid-template-columns: repeat(2, 1fr); }
+
+  .feature-block .container,
+  .feature-block.reverse .container { gap: 48px; }
+
+  .steps-container { gap: 8px; }
+  .step-card { padding: 24px 18px; }
+}
+
+/* Mobile (≤768px) */
+@media (max-width: 768px) {
+  /* Nav */
+  nav { padding: 0 20px; }
+  .nav-links { gap: 16px; }
+  .nav-links a:not(.btn-primary) { display: none; }
+
+  /* Hero */
+  #hero { padding: 72px 20px 0; }
+  .hero-h1 { font-size: 34px; }
+  .hero-sub { font-size: 15px; }
+  .hero-cta-group { flex-direction: column; gap: 12px; }
+  .btn-primary.large { width: 100%; text-align: center; }
+  .hero-app-mock { display: none; }
+
+  /* Container */
+  .container { padding: 0 20px; }
+
+  /* Problem */
+  #problem { padding: 72px 0; }
+  .problem-grid { grid-template-columns: 1fr; gap: 12px; }
+
+  /* Features */
+  .feature-block { padding: 72px 0; }
+  .feature-block .container,
+  .feature-block.reverse .container {
+    flex-direction: column !important;
+    gap: 40px;
+  }
+  .feature-text, .feature-visual { width: 100%; }
+  .section-h2 { font-size: 26px; }
+  .feature-h3 { font-size: 22px; }
+
+  /* How-to */
+  #howto { padding: 72px 0; }
+  .steps-container {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    margin-top: 40px;
+  }
+  .step-arrow { padding-top: 0; transform: rotate(90deg); justify-self: center; }
+
+  /* CTA */
+  #cta { padding: 80px 20px; }
+  .cta-h2 { font-size: 28px; }
+  .cta-sub { font-size: 15px; }
+  .btn-primary.large { width: 100%; max-width: 320px; }
+
+  /* Footer */
+  footer {
+    flex-direction: column;
+    gap: 8px;
+    text-align: center;
+    padding: 24px 20px;
+  }
+}
+
+/* Small mobile (≤480px) */
+@media (max-width: 480px) {
+  .hero-h1 { font-size: 28px; }
+  .bf-grid { grid-template-columns: 1fr; }
+  .mock-diff-row { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- ─── NAV ─── -->
+<nav>
+  <a href="#" class="nav-logo">Ei<span>Saku</span></a>
+  <div class="nav-links">
+    <a href="#problem">課題</a>
+    <a href="#features">特徴</a>
+    <a href="#howto">使い方</a>
+    <a href="http://localhost:3000/invite" class="btn-primary" style="padding:8px 20px; font-size:13px;">今すぐ試す</a>
+  </div>
+</nav>
+
+<!-- ─── HERO ─── -->
+<section id="hero">
+  <div class="hero-eyebrow fade-in">AI-POWERED ENGLISH WRITING COACH</div>
+  <h1 class="hero-h1 fade-in fade-in-delay-1">書いて、直して、<br><span class="accent">伸びていく。</span></h1>
+  <p class="hero-sub fade-in fade-in-delay-2">あなた専用の英作文コーチ。<br>文法・語彙・文体・構成まで、多角的にフィードバック。</p>
+  <div class="hero-cta-group fade-in fade-in-delay-3">
+    <a href="http://localhost:3000/invite" class="btn-primary large">今すぐ始める →</a>
+    <a href="#howto" class="btn-secondary">使い方を見る ↓</a>
+  </div>
+
+  <!-- App Mock -->
+  <div class="hero-app-mock fade-in fade-in-delay-4">
+    <div class="mock-titlebar">
+      <div class="mock-dot" style="background:#FC5F57;"></div>
+      <div class="mock-dot" style="background:#FEBC2E;"></div>
+      <div class="mock-dot" style="background:#2BC840;"></div>
+      <span class="mock-title-text">EiSaku — Free Mode</span>
+    </div>
+    <div class="mock-app">
+      <!-- Sidebar -->
+      <div class="mock-sidebar">
+        <div class="mock-sidebar-label">文体</div>
+        <div class="mock-style-tabs">
+          <div class="mock-tab active">ビジネス</div>
+          <div class="mock-tab">カジュアル</div>
+          <div class="mock-tab">学術</div>
+        </div>
+        <textarea class="mock-textarea" readonly>When I study AI-assisted coding, I encounter many difficulties, but I would like to overcome them to become an excellent AI engineer.</textarea>
+        <div style="font-size:11px; color:var(--text-sub); margin-top:6px; font-family:'Inter',sans-serif;">133文字・22語</div>
+        <button class="mock-submit-btn">✦ 添削する</button>
+      </div>
+      <!-- Result -->
+      <div class="mock-content">
+        <div class="mock-score-row">
+          <div>
+            <div class="mock-score" id="heroScore">0</div>
+            <div class="mock-score-label">SCORE</div>
+          </div>
+          <div style="flex:1;">
+            <div style="display:flex;gap:8px;margin-bottom:8px;">
+              <span class="tag tag-struct">Structure 1件</span>
+              <span class="tag tag-vocab">Vocabulary 1件</span>
+            </div>
+            <div class="mock-score-bar"><div class="mock-score-fill" id="heroBar"></div></div>
+          </div>
+          <div style="font-size:12px;color:var(--pink-dark);font-family:'Noto Sans JP',sans-serif;cursor:pointer;">修正文をコピー</div>
+        </div>
+        <div class="mock-diff-row">
+          <div class="mock-diff-pane before">
+            <div class="pane-label" style="color:#6B7280;">原文</div>
+            <span class="hl-struct">When I study AI-assisted coding, I encounter many difficulties</span>, but I would like to overcome them to become an <span class="hl-vocab">excellent</span> AI engineer.
+          </div>
+          <div class="mock-diff-pane after">
+            <div class="pane-label" style="color:var(--pink-dark);">修正文</div>
+            <span class="hl-struct-fix">While studying AI-assisted coding, I encounter many difficulties</span>, but I would like to overcome them to become a <span class="hl-vocab-fix">skilled</span> AI engineer.
+          </div>
+        </div>
+        <div class="mock-detail-item">
+          <div class="mock-detail-row">
+            <span class="tag tag-struct" style="font-size:11px;">Structure</span>
+            <span style="font-size:12px;font-family:'Inter',sans-serif;text-decoration:line-through;color:#9CA3AF;">When I study...</span>
+            <span class="arrow-icon">→</span>
+            <span style="font-size:12px;font-family:'Inter',sans-serif;color:var(--purple);">While studying...</span>
+          </div>
+          <div class="mock-explanation">「When I study...」は文法的には正しいですが、ビジネス文書では分詞構文を使うとより洗練された印象を与えます。</div>
+        </div>
+        <div class="mock-detail-item">
+          <div class="mock-detail-row">
+            <span class="tag tag-vocab" style="font-size:11px;">Vocabulary</span>
+            <span style="font-size:12px;font-family:'Inter',sans-serif;text-decoration:line-through;color:#9CA3AF;">excellent</span>
+            <span class="arrow-icon">→</span>
+            <span style="font-size:12px;font-family:'Inter',sans-serif;color:var(--blue);">skilled</span>
+          </div>
+          <div class="mock-explanation">「skilled（熟練した）」の方がよりプロフェッショナルな印象を与えます。</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── PROBLEM ─── -->
+<section id="problem">
+  <div class="container">
+    <div class="inner fade-in">
+      <div class="section-eyebrow">悩み</div>
+      <h2 class="section-h2">こんな悩みはありませんか？</h2>
+      <p class="section-lead" style="margin:0 auto;">TOEIC 600〜800点でも、英語を「書く」となると途端に自信がなくなる。そんな壁を感じていませんか。</p>
+    </div>
+    <div class="problem-grid">
+      <div class="problem-card fade-in fade-in-delay-1">
+        <div class="problem-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+          </svg>
+        </div>
+        <div class="problem-title">書いても「これで合ってる？」と自信が持てない</div>
+        <div class="problem-body">英文を書き終えても、ネイティブが自然に感じるか判断できず、送る前に不安になってしまう。</div>
+      </div>
+      <div class="problem-card fade-in fade-in-delay-2">
+        <div class="problem-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+          </svg>
+        </div>
+        <div class="problem-title">知識はあるのに、書くと出てこない</div>
+        <div class="problem-body">TOEICの点数はあるのに、いざメールや文章を書こうとすると、知っているはずの表現が思い出せない。</div>
+      </div>
+      <div class="problem-card fade-in fade-in-delay-3">
+        <div class="problem-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+          </svg>
+        </div>
+        <div class="problem-title">間違いの理由が分からず、同じミスを繰り返す</div>
+        <div class="problem-body">添削はしてもらえても「なぜ違うのか」の説明がなく、同じ文法ミスを何度もしてしまう。</div>
+      </div>
+      <div class="problem-card fade-in fade-in-delay-4">
+        <div class="problem-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+          </svg>
+        </div>
+        <div class="problem-title">続けられる仕組みがなく、いつも三日坊主</div>
+        <div class="problem-body">英語学習を始めてもモチベーションが続かず、気づけば数週間何もしていない、というループを繰り返す。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── FEATURES ─── -->
+<section id="features">
+
+  <!-- Feature 1: 多角的な添削 -->
+  <div class="feature-block">
+    <div class="container" style="display:flex;align-items:center;gap:80px;width:100%;">
+      <div class="feature-text fade-in">
+        <div class="feature-num">FEATURE 01</div>
+        <h3 class="feature-h3">Grammar だけじゃない、<br>多角的な添削。</h3>
+        <p class="feature-desc">文法ミスはもちろん、語彙の自然さ・文体のトーン・論理構成まで。AIが4つの観点で徹底的にフィードバック。「なぜ修正するのか」の理由付きで、読むだけで学習になります。</p>
+        <div class="feature-tags">
+          <span class="tag tag-grammar">Grammar</span>
+          <span class="tag tag-vocab">Vocabulary</span>
+          <span class="tag tag-tone">Tone</span>
+          <span class="tag tag-struct">Structure</span>
+        </div>
+      </div>
+      <div class="feature-visual fade-in fade-in-delay-2">
+        <div class="bf-mock">
+          <div class="bf-header">
+            <div>
+              <div style="font-size:10px;color:var(--text-sub);font-family:'Inter',sans-serif;margin-bottom:4px;">SCORE</div>
+              <div class="bf-score-big">82</div>
+            </div>
+            <div class="bf-tags">
+              <span class="tag tag-struct">Structure</span>
+              <span class="tag tag-vocab">Vocabulary</span>
+            </div>
+          </div>
+          <div class="bf-grid">
+            <div class="bf-pane before">
+              <div class="bf-pane-label"><div class="dot"></div>原文</div>
+              <span style="background:#FEF3C7;padding:0 2px;border-radius:2px;text-decoration:line-through;color:#92400E;">When I study</span> AI-assisted coding, I encounter many difficulties, but I would like to overcome them to become an <span style="background:#DBEAFE;padding:0 2px;border-radius:2px;text-decoration:line-through;color:#1D4ED8;">excellent</span> AI engineer.
+            </div>
+            <div class="bf-pane after">
+              <div class="bf-pane-label"><div class="dot"></div>修正文</div>
+              <span style="background:#EDE9FE;padding:0 2px;border-radius:2px;color:#6D28D9;">While studying</span> AI-assisted coding, I encounter many difficulties, but I would like to overcome them to become a <span style="background:#DBEAFE;padding:0 2px;border-radius:2px;color:#1D4ED8;">skilled</span> AI engineer.
+            </div>
+          </div>
+          <div class="bf-note">💡 「skilled（熟練した）」の方がビジネス文書ではよりプロフェッショナルな印象を与えます。「When I study...」は分詞構文「While studying...」を使うと洗練された表現になります。</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Feature 2: レベル別 -->
+  <div class="feature-block reverse bg-off">
+    <div class="container" style="display:flex;align-items:center;gap:80px;flex-direction:row-reverse;width:100%;">
+      <div class="feature-text fade-in">
+        <div class="feature-num">FEATURE 02</div>
+        <h3 class="feature-h3">今のレベルに合った課題で、<br>着実にステップアップ。</h3>
+        <p class="feature-desc">Lv.1の基本5文型から始まり、時制・関係代名詞・仮定法・ビジネス定型表現まで、段階的に習得。Challenge Mode では現在のレベルに最適化されたお題が出題されます。</p>
+        <div class="current-badge-big">
+          <span>⚡</span> 現在 Lv.4 — 関係代名詞
+        </div>
+        <p class="feature-desc" style="font-size:14px;">レベルアップのたびに達成感。継続するほど、着実に力がつく設計です。</p>
+      </div>
+      <div class="feature-visual fade-in fade-in-delay-2">
+        <div class="level-mock">
+          <div class="level-mock-title">学習レベル一覧</div>
+          <div class="level-item done">
+            <div class="lv-badge done">1</div>
+            <div class="level-name">基本5文型</div>
+            <div class="level-check">✓</div>
+          </div>
+          <div class="level-item done">
+            <div class="lv-badge done">2</div>
+            <div class="level-name">時制の基本</div>
+            <div class="level-check">✓</div>
+          </div>
+          <div class="level-item done">
+            <div class="lv-badge done">3</div>
+            <div class="level-name">現在完了・進行形</div>
+            <div class="level-check">✓</div>
+          </div>
+          <div class="level-item current">
+            <div class="lv-badge current">4</div>
+            <div class="level-name" style="font-weight:700;color:var(--pink-dark);">関係代名詞 <span style="font-size:11px;color:var(--pink);">← 進行中</span></div>
+          </div>
+          <div class="level-item upcoming">
+            <div class="lv-badge upcoming">5</div>
+            <div class="level-name">不定詞・動名詞</div>
+          </div>
+          <div class="level-item upcoming">
+            <div class="lv-badge upcoming">6</div>
+            <div class="level-name">仮定法</div>
+          </div>
+          <div class="level-item upcoming" style="opacity:0.4;">
+            <div class="lv-badge upcoming">7</div>
+            <div class="level-name">受動態・使役</div>
+          </div>
+          <div class="level-item upcoming" style="opacity:0.25;">
+            <div class="lv-badge upcoming">10</div>
+            <div class="level-name">ビジネス定型表現</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Feature 3: 振り返り -->
+  <div class="feature-block">
+    <div class="container" style="display:flex;align-items:center;gap:80px;width:100%;">
+      <div class="feature-text fade-in">
+        <div class="feature-num">FEATURE 03</div>
+        <h3 class="feature-h3">添削履歴で、弱点を<br>丸ごと把握する。</h3>
+        <p class="feature-desc">過去の添削をいつでも振り返れる履歴機能。スコアの変化・観点別ミスの頻度を可視化し、「自分がどこで躓いているか」が一目でわかります。同じミスを繰り返さないための仕組み。</p>
+        <div class="feature-tags">
+          <span class="tag tag-pink">Free Mode</span>
+          <span class="tag" style="background:#EDE9FE;color:#6D28D9;">Challenge Mode</span>
+        </div>
+      </div>
+      <div class="feature-visual fade-in fade-in-delay-2">
+        <div class="history-mock">
+          <div class="history-header">添削履歴 <span style="font-size:11px;color:var(--text-sub);font-weight:400;margin-left:6px;">20件 / 全20件</span></div>
+          <div class="history-item">
+            <div class="history-score"><span class="num">82</span><span class="lbl">SCORE</span></div>
+            <div class="history-body">
+              <div class="history-meta">
+                <span class="history-date">4月25日</span>
+                <span class="tag tag-pink" style="font-size:10px;padding:1px 6px;">Free Mode</span>
+                <span class="tag tag-lv">Lv.4 関係代名詞</span>
+              </div>
+              <div class="history-text">When I study AI-assisted coding, I encounter many difficulties...</div>
+              <div class="history-tags"><span class="tag tag-struct" style="font-size:11px;">Structure</span><span class="tag tag-vocab" style="font-size:11px;">Vocabulary</span></div>
+            </div>
+          </div>
+          <div class="history-item">
+            <div class="history-score"><span class="num">95</span><span class="lbl">SCORE</span></div>
+            <div class="history-body">
+              <div class="history-meta">
+                <span class="history-date">4月25日</span>
+                <span class="tag" style="background:#EDE9FE;color:#6D28D9;font-size:10px;padding:1px 6px;">Challenge</span>
+                <span class="tag tag-lv">Lv.4 関係代名詞</span>
+              </div>
+              <div class="history-text">I want to visit Paris, where there are many beautiful buildings.</div>
+              <div class="history-tags"><span class="tag tag-tone" style="font-size:11px;">Tone</span></div>
+            </div>
+          </div>
+          <div class="history-item">
+            <div class="history-score"><span class="num">88</span><span class="lbl">SCORE</span></div>
+            <div class="history-body">
+              <div class="history-meta">
+                <span class="history-date">4月24日</span>
+                <span class="tag" style="background:#EDE9FE;color:#6D28D9;font-size:10px;padding:1px 6px;">Challenge</span>
+                <span class="tag tag-lv">Lv.1 基本5文型</span>
+              </div>
+              <div class="history-text">I like strawberries because they are very cute and delicious.</div>
+              <div class="history-tags"><span class="tag tag-tone" style="font-size:11px;">Tone</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<!-- ─── HOW TO ─── -->
+<section id="howto">
+  <div class="container">
+    <div class="howto-inner fade-in">
+      <div class="section-eyebrow">使い方</div>
+      <h2 class="section-h2">3ステップで始められる</h2>
+      <p class="section-lead" style="margin:0 auto;">むずかしい設定は不要。英文を書いて送るだけ。あとはAIが全部やってくれます。</p>
+    </div>
+    <div class="steps-container">
+      <!-- Step 1 -->
+      <div class="step-card fade-in fade-in-delay-1">
+        <div class="step-num">STEP 01</div>
+        <div class="step-title">英文を書く</div>
+        <div class="step-desc">業務メール・日記・任意のテーマ。何でも構いません。書いて「添削する」を押すだけ。</div>
+        <div class="step-input-mock">I want visit Paris where has many beautiful buildings and I want eat french cuisine there.<span class="cursor"></span></div>
+      </div>
+      <!-- Arrow -->
+      <div class="step-arrow fade-in">→</div>
+      <!-- Step 2 -->
+      <div class="step-card fade-in fade-in-delay-2">
+        <div class="step-num">STEP 02</div>
+        <div class="step-title">AIが添削・解説</div>
+        <div class="step-desc">数秒で添削完了。ビフォー・アフターで修正箇所と理由が一目でわかります。</div>
+        <div class="step-bf">
+          <div class="step-bf-row before">
+            <div class="step-bf-label">BEFORE</div>
+            I want <span style="background:#FCA5A5;border-radius:2px;padding:0 2px;text-decoration:line-through;">visit</span> Paris<span style="background:#FCA5A5;border-radius:2px;padding:0 2px;text-decoration:line-through;"> where has</span> many beautiful buildings...
+          </div>
+          <div style="text-align:center;color:var(--pink-dark);font-size:18px;">↓</div>
+          <div class="step-bf-row after">
+            <div class="step-bf-label">AFTER</div>
+            I want <span style="background:#F9A8D4;border-radius:2px;padding:0 2px;">to visit</span> Paris, <span style="background:#F9A8D4;border-radius:2px;padding:0 2px;">where there are</span> many beautiful buildings...
+          </div>
+        </div>
+      </div>
+      <!-- Arrow -->
+      <div class="step-arrow fade-in">→</div>
+      <!-- Step 3 -->
+      <div class="step-card fade-in fade-in-delay-3">
+        <div class="step-num">STEP 03</div>
+        <div class="step-title">振り返って伸びる</div>
+        <div class="step-desc">スコアと履歴が積み重なり、成長が可視化されます。続けるほど、力になります。</div>
+        <div class="step-growth">
+          <div class="growth-row">
+            <div class="growth-date">4月21日</div>
+            <div class="growth-bar-wrap"><div class="growth-bar" style="width:62%;"></div></div>
+            <div class="growth-score">62</div>
+          </div>
+          <div class="growth-row">
+            <div class="growth-date">4月22日</div>
+            <div class="growth-bar-wrap"><div class="growth-bar" style="width:71%;"></div></div>
+            <div class="growth-score">71</div>
+          </div>
+          <div class="growth-row">
+            <div class="growth-date">4月23日</div>
+            <div class="growth-bar-wrap"><div class="growth-bar" style="width:78%;"></div></div>
+            <div class="growth-score">78</div>
+          </div>
+          <div class="growth-row">
+            <div class="growth-date">4月24日</div>
+            <div class="growth-bar-wrap"><div class="growth-bar" style="width:85%;"></div></div>
+            <div class="growth-score">85</div>
+          </div>
+          <div class="growth-row" style="font-weight:700;">
+            <div class="growth-date" style="color:var(--pink-dark);">4月25日</div>
+            <div class="growth-bar-wrap"><div class="growth-bar" style="width:95%;background:linear-gradient(90deg,var(--pink),var(--pink-dark));"></div></div>
+            <div class="growth-score">95</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── CTA ─── -->
+<section id="cta">
+  <div class="fade-in">
+    <div class="section-eyebrow" style="margin-bottom:20px;">今すぐスタート</div>
+    <h2 class="cta-h2">今日から、書いて<br><span style="color:var(--pink-dark);">伸びる習慣</span>を。</h2>
+    <p class="cta-sub">毎日少しずつ英文を書くだけ。<br>EiSakuが、あなたの英語力を着実に引き上げます。</p>
+    <a href="http://localhost:3000/invite" class="btn-primary large">EiSakuを試してみる →</a>
+  </div>
+</section>
+
+<!-- ─── FOOTER ─── -->
+<footer>
+  <div class="footer-logo">Ei<span>Saku</span></div>
+  <div class="footer-copy">© 2026 EiSaku. AI-Powered English Writing Coach.</div>
+</footer>
+
+<script>
+// Scroll-triggered fade-in animations
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.12 });
+
+document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+// Score count-up animation
+function countUp(el, target, duration) {
+  let start = null;
+  const step = (timestamp) => {
+    if (!start) start = timestamp;
+    const progress = Math.min((timestamp - start) / duration, 1);
+    const eased = 1 - Math.pow(1 - progress, 3);
+    el.textContent = Math.round(eased * target);
+    if (progress < 1) requestAnimationFrame(step);
+  };
+  requestAnimationFrame(step);
+}
+
+// Trigger score animation when hero enters viewport
+const heroScore = document.getElementById('heroScore');
+const heroBar = document.getElementById('heroBar');
+let scored = false;
+const scoreObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting && !scored) {
+      scored = true;
+      setTimeout(() => {
+        countUp(heroScore, 82, 1000);
+        heroBar.style.width = '82%';
+      }, 600);
+    }
+  });
+}, { threshold: 0.3 });
+scoreObserver.observe(document.getElementById('hero'));
+</script>
+</body>
+</html>
