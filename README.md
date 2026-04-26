@@ -24,3 +24,5 @@ The design medium is **HTML/CSS/JS** — these are prototypes, not production co
 
 ![EiSaku アプリ画面](images/app-screenshot.png)
 
+<img width="1889" height="980" alt="image" src="https://github.com/user-attachments/assets/4e05ed91-1823-44d9-82c5-0688f09ca81a" />
+
