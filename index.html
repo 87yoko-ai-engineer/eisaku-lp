@@ -907,73 +907,9 @@ footer {
     <a href="#howto" class="btn-secondary">使い方を見る ↓</a>
   </div>
 
-  <!-- App Mock -->
+  <!-- App Screenshot -->
   <div class="hero-app-mock fade-in fade-in-delay-4">
-    <div class="mock-titlebar">
-      <div class="mock-dot" style="background:#FC5F57;"></div>
-      <div class="mock-dot" style="background:#FEBC2E;"></div>
-      <div class="mock-dot" style="background:#2BC840;"></div>
-      <span class="mock-title-text">EiSaku — Free Mode</span>
-    </div>
-    <div class="mock-app">
-      <!-- Sidebar -->
-      <div class="mock-sidebar">
-        <div class="mock-sidebar-label">文体</div>
-        <div class="mock-style-tabs">
-          <div class="mock-tab active">ビジネス</div>
-          <div class="mock-tab">カジュアル</div>
-          <div class="mock-tab">学術</div>
-        </div>
-        <textarea class="mock-textarea" readonly>When I study AI-assisted coding, I encounter many difficulties, but I would like to overcome them to become an excellent AI engineer.</textarea>
-        <div style="font-size:11px; color:var(--text-sub); margin-top:6px; font-family:'Inter',sans-serif;">133文字・22語</div>
-        <button class="mock-submit-btn">✦ 添削する</button>
-      </div>
-      <!-- Result -->
-      <div class="mock-content">
-        <div class="mock-score-row">
-          <div>
-            <div class="mock-score" id="heroScore">0</div>
-            <div class="mock-score-label">SCORE</div>
-          </div>
-          <div style="flex:1;">
-            <div style="display:flex;gap:8px;margin-bottom:8px;">
-              <span class="tag tag-struct">Structure 1件</span>
-              <span class="tag tag-vocab">Vocabulary 1件</span>
-            </div>
-            <div class="mock-score-bar"><div class="mock-score-fill" id="heroBar"></div></div>
-          </div>
-          <div style="font-size:12px;color:var(--pink-dark);font-family:'Noto Sans JP',sans-serif;cursor:pointer;">修正文をコピー</div>
-        </div>
-        <div class="mock-diff-row">
-          <div class="mock-diff-pane before">
-            <div class="pane-label" style="color:#6B7280;">原文</div>
-            <span class="hl-struct">When I study AI-assisted coding, I encounter many difficulties</span>, but I would like to overcome them to become an <span class="hl-vocab">excellent</span> AI engineer.
-          </div>
-          <div class="mock-diff-pane after">
-            <div class="pane-label" style="color:var(--pink-dark);">修正文</div>
-            <span class="hl-struct-fix">While studying AI-assisted coding, I encounter many difficulties</span>, but I would like to overcome them to become a <span class="hl-vocab-fix">skilled</span> AI engineer.
-          </div>
-        </div>
-        <div class="mock-detail-item">
-          <div class="mock-detail-row">
-            <span class="tag tag-struct" style="font-size:11px;">Structure</span>
-            <span style="font-size:12px;font-family:'Inter',sans-serif;text-decoration:line-through;color:#9CA3AF;">When I study...</span>
-            <span class="arrow-icon">→</span>
-            <span style="font-size:12px;font-family:'Inter',sans-serif;color:var(--purple);">While studying...</span>
-          </div>
-          <div class="mock-explanation">「When I study...」は文法的には正しいですが、ビジネス文書では分詞構文を使うとより洗練された印象を与えます。</div>
-        </div>
-        <div class="mock-detail-item">
-          <div class="mock-detail-row">
-            <span class="tag tag-vocab" style="font-size:11px;">Vocabulary</span>
-            <span style="font-size:12px;font-family:'Inter',sans-serif;text-decoration:line-through;color:#9CA3AF;">excellent</span>
-            <span class="arrow-icon">→</span>
-            <span style="font-size:12px;font-family:'Inter',sans-serif;color:var(--blue);">skilled</span>
-          </div>
-          <div class="mock-explanation">「skilled（熟練した）」の方がよりプロフェッショナルな印象を与えます。</div>
-        </div>
-      </div>
-    </div>
+    <img src="images/app-screenshot.png" alt="EiSaku アプリ画面" style="width:100%;display:block;">
   </div>
 </section>
 
@@ -1286,35 +1222,6 @@ const observer = new IntersectionObserver((entries) => {
 
 document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
 
-// Score count-up animation
-function countUp(el, target, duration) {
-  let start = null;
-  const step = (timestamp) => {
-    if (!start) start = timestamp;
-    const progress = Math.min((timestamp - start) / duration, 1);
-    const eased = 1 - Math.pow(1 - progress, 3);
-    el.textContent = Math.round(eased * target);
-    if (progress < 1) requestAnimationFrame(step);
-  };
-  requestAnimationFrame(step);
-}
-
-// Trigger score animation when hero enters viewport
-const heroScore = document.getElementById('heroScore');
-const heroBar = document.getElementById('heroBar');
-let scored = false;
-const scoreObserver = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting && !scored) {
-      scored = true;
-      setTimeout(() => {
-        countUp(heroScore, 82, 1000);
-        heroBar.style.width = '82%';
-      }, 600);
-    }
-  });
-}, { threshold: 0.3 });
-scoreObserver.observe(document.getElementById('hero'));
 </script>
 </body>
 </html>
