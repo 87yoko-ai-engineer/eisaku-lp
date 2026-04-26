@@ -20,3 +20,4 @@ The design medium is **HTML/CSS/JS** — these are prototypes, not production co
 
 - `eisaku-lp/README.md` — this file
 - `eisaku-lp/project/` — the `EiSaku LP` project files (HTML prototypes, assets, components)
+![EiSaku アプリ画面](eisaku-lp/images/app-screenshot.png)
